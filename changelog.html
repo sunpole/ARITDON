@@ -242,6 +242,41 @@
             border-bottom: 1px solid #ffff00;
         }
         
+        /* Кнопка "Наверх" */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(145deg, #004488, #0066cc);
+            border: 2px solid #ffff00;
+            color: #ffff00;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.4);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+            animation: pulse-gold 2s infinite;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(255, 255, 0, 0.6);
+            background: linear-gradient(145deg, #0055aa, #0077ff);
+        }
+        
         /* Футер */
         footer {
             margin-top: 50px;
@@ -267,6 +302,14 @@
                 min-width: 120px;
                 text-align: center;
             }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -281,6 +324,17 @@
                 ИСХОДНЫЙ КОД
             </a>
         </div>
+
+        <!-- Навигация по якорям - КНОПКИ (ПЕРЕМЕЩЕНА ВВЕРХ) -->
+        <nav class="anchor-menu">
+            <h2>🚀 НАВИГАЦИЯ ПО ВЕРСИЯМ ПРОЕКТА</h2>
+            <div class="anchor-buttons">
+                <a href="#version-1-2" class="anchor-btn latest">ВЕРСИЯ 1.2</a>
+                <a href="#version-1-1" class="anchor-btn">ВЕРСИЯ 1.1</a>
+                <a href="#version-1" class="anchor-btn">ВЕРСИЯ 1.0</a>
+                <a href="#project-info" class="anchor-btn">О ПРОЕКТЕ</a>
+            </div>
+        </nav>
 
         <!-- Секция с правилами оформления -->
         <section class="style-rules">
@@ -316,17 +370,6 @@
                 <li>Последняя версия всегда первая в навигации</li>
             </ul>
         </section>
-
-        <!-- Навигация по якорям - КНОПКИ -->
-        <nav class="anchor-menu">
-            <h2>🚀 НАВИГАЦИЯ ПО ВЕРСИЯМ ПРОЕКТА</h2>
-            <div class="anchor-buttons">
-                <a href="#version-1-2" class="anchor-btn latest">ВЕРСИЯ 1.2</a>
-                <a href="#version-1-1" class="anchor-btn">ВЕРСИЯ 1.1</a>
-                <a href="#version-1" class="anchor-btn">ВЕРСИЯ 1.0</a>
-                <a href="#project-info" class="anchor-btn">О ПРОЕКТЕ</a>
-            </div>
-        </nav>
 
         <!-- Основной контент -->
         <main>
@@ -514,5 +557,30 @@
             <p>📝 Страница архива обновляется вручную при каждом значительном изменении проекта</p>
         </footer>
     </div>
+
+    <!-- Плавающая кнопка "Наверх" -->
+    <a href="#" class="back-to-top" id="backToTop">↑</a>
+
+    <script>
+        // Показ/скрытие кнопки "Наверх"
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+        
+        // Плавная прокрутка наверх
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
 </body>
 </html>
