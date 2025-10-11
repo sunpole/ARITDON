@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Архив изменений | ARITDON</title>
+    <title>СЕКРЕТНЫЙ АРХИВ | ARITDON</title>
     <style>
         /* Основные стили */
         body {
-            background-color: #1a1a1a; /* Темно-серый фон */
+            background-color: #0a0a0a; /* Еще более темный фон */
             color: #00aaff; /* Ярко-синий текст */
             font-family: 'Courier New', monospace;
             margin: 0;
             padding: 0;
             line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 170, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 170, 255, 0.05) 0%, transparent 20%);
         }
         
         /* Контейнер для контента */
@@ -22,149 +25,324 @@
             padding: 20px;
         }
         
+        /* Главные кнопки проекта */
+        .project-links {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .main-project-link {
+            background: linear-gradient(145deg, #001a33, #003366);
+            border: 2px solid #00aaff;
+            color: #00aaff;
+            padding: 15px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-project-link::before {
+            content: '🔒';
+            margin-right: 10px;
+        }
+        
+        .main-project-link:hover {
+            background: linear-gradient(145deg, #002b55, #004488);
+            box-shadow: 0 0 25px rgba(0, 170, 255, 0.6);
+            color: #ffff00;
+            border-color: #ffff00;
+            transform: translateY(-2px);
+        }
+        
+        .github-link {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #00aaff;
+            color: #00aaff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .github-link::before {
+            content: '⚙️';
+            margin-right: 8px;
+        }
+        
+        .github-link:hover {
+            background: linear-gradient(145deg, #2a2a2a, #3a3a3a);
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.4);
+            color: #ffff00;
+        }
+        
         /* Заголовки */
         h1, h2, h3 {
             color: #00aaff;
-            border-bottom: 1px solid #00aaff;
+            border-bottom: 2px solid #00aaff;
             padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 170, 255, 0.3);
         }
         
-        /* Ссылки */
+        /* Ссылки в тексте */
         a {
             color: #00aaff;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s ease;
+            border-bottom: 1px dotted #00aaff;
+            padding: 2px 4px;
         }
         
         a:hover {
-            color: #ffff00; /* Неоново-желтый при наведении */
+            color: #ffff00;
+            background-color: rgba(255, 255, 0, 0.1);
+            border-bottom: 1px solid #ffff00;
         }
         
-        /* Якорное меню */
+        /* Якорное меню - КНОПКИ */
         .anchor-menu {
-            background-color: #2a2a2a;
-            padding: 15px;
-            border: 1px solid #00aaff;
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            padding: 20px;
+            border: 2px solid #00aaff;
             margin-bottom: 30px;
-            border-radius: 5px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.2);
         }
         
-        .anchor-menu ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
+        .anchor-menu h2 {
+            margin-top: 0;
+            border-bottom: 1px solid #00aaff;
+        }
+        
+        .anchor-buttons {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
+            margin-top: 15px;
         }
         
-        .anchor-menu li {
-            margin: 0;
-        }
-        
-        /* Секции контента */
-        .section {
-            margin-bottom: 40px;
-            padding: 20px;
-            background-color: #2a2a2a;
+        .anchor-btn {
+            background: linear-gradient(145deg, #002b55, #004488);
             border: 1px solid #00aaff;
-            border-radius: 5px;
-        }
-        
-        /* Выделение важной информации */
-        .important {
-            color: #ffff00; /* Неоново-желтый для важной информации */
+            color: #00aaff;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
             font-weight: bold;
-            border-left: 3px solid #ffff00;
-            padding-left: 15px;
-            margin: 15px 0;
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+            position: relative;
+            overflow: hidden;
         }
         
-        /* Код */
-        .code-block {
-            background-color: #0a0a0a;
-            border: 1px solid #00aaff;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-            margin: 15px 0;
+        .anchor-btn::before {
+            content: '▶';
+            margin-right: 8px;
+            font-size: 12px;
         }
         
-        /* Правила оформления */
-        .style-rules {
-            background-color: #2a2a2a;
-            padding: 20px;
-            border: 1px solid #ffff00; /* Желтая рамка для важной секции */
-            border-radius: 5px;
-            margin-bottom: 30px;
+        .anchor-btn:hover {
+            background: linear-gradient(145deg, #003366, #0055aa);
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
+            color: #ffff00;
+            border-color: #ffff00;
+            transform: translateY(-2px);
         }
         
-        /* Стили для версий */
-        .version {
-            border-left: 3px solid #ffff00;
-            padding-left: 15px;
-            margin: 20px 0;
+        .anchor-btn.latest {
+            background: linear-gradient(145deg, #004488, #0066cc);
+            border: 2px solid #ffff00;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.4);
+            animation: pulse-gold 2s infinite;
         }
         
-        /* Анимация для важных элементов */
-        @keyframes pulse {
+        @keyframes pulse-gold {
             0% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.4); }
             70% { box-shadow: 0 0 0 10px rgba(255, 255, 0, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0); }
         }
         
-        .pulse {
-            animation: pulse 2s infinite;
+        /* Секции контента */
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #00aaff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.2);
+            border-color: #ffff00;
+        }
+        
+        /* Выделение важной информации */
+        .important {
+            color: #ffff00;
+            font-weight: bold;
+            border-left: 4px solid #ffff00;
+            padding: 15px 20px;
+            margin: 20px 0;
+            background: rgba(255, 255, 0, 0.05);
+            border-radius: 0 8px 8px 0;
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+        }
+        
+        /* Код */
+        .code-block {
+            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+            border: 1px solid #00aaff;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Правила оформления */
+        .style-rules {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            padding: 25px;
+            border: 2px solid #ffff00;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 25px rgba(255, 255, 0, 0.3);
+        }
+        
+        /* Стили для версий */
+        .version {
+            border-left: 4px solid #ffff00;
+            padding-left: 20px;
+            margin: 25px 0;
+            background: rgba(255, 255, 0, 0.02);
+            border-radius: 0 8px 8px 0;
+        }
+        
+        /* Инструкция для ИИ */
+        .ai-instruction {
+            background: linear-gradient(145deg, #001a33, #002b55);
+            border: 2px solid #00aaff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
+        }
+        
+        .ai-instruction h3 {
+            color: #ffff00;
+            border-bottom: 1px solid #ffff00;
+        }
+        
+        /* Футер */
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            border-top: 2px solid #00aaff;
+            padding-top: 20px;
+            color: #00aaff;
+            text-shadow: 0 0 10px rgba(0, 170, 255, 0.3);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .project-links {
+                flex-direction: column;
+            }
+            
+            .anchor-buttons {
+                justify-content: center;
+            }
+            
+            .anchor-btn {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Главные ссылки проекта -->
+        <div class="project-links">
+            <a href="https://sunpole.github.io/ARITDON/" class="main-project-link" target="_blank">
+                СЕКРЕТНЫЙ ПРОЕКТ ARITDON
+            </a>
+            <a href="https://github.com/sunpole/ARITDON" class="github-link" target="_blank">
+                ИСХОДНЫЙ КОД
+            </a>
+        </div>
+
         <!-- Секция с правилами оформления -->
-        <section class="style-rules pulse">
-            <h1>ПРАВИЛА ОФОРМЛЕНИЯ ПРОЕКТА</h1>
-            <p><strong>Цветовая схема:</strong></p>
+        <section class="style-rules">
+            <h1>🔒 СЕКРЕТНЫЙ АРХИВ ПРОЕКТА ARITDON</h1>
+            <p><strong>ЦВЕТОВАЯ СХЕМА СТИЛЯ "ПЕНТАГОН":</strong></p>
             <ul>
-                <li>Основной фон: темно-серый (#1a1a1a)</li>
+                <li>Основной фон: темно-серый (#0a0a0a)</li>
                 <li>Основной текст: ярко-синий (#00aaff)</li>
                 <li>Акцентный цвет (3%): яркий неоново-желтый (#ffff00)</li>
             </ul>
-            <p><strong>Работа с якорями:</strong></p>
+            <p><strong>СИСТЕМА АРХИВАЦИИ:</strong></p>
             <ul>
-                <li>Каждая версия проекта должна иметь свой якорь</li>
+                <li>Каждая версия проекта имеет уникальный якорь</li>
                 <li>Якоря добавляются вручную в код страницы</li>
-                <li>В меню навигации сверху всегда должны быть ссылки на все версии</li>
+                <li>В навигации сверху - кнопки для быстрого перехода</li>
+                <li>Последняя версия всегда выделена специально</li>
             </ul>
-            <p><strong>Генерация кода:</strong></p>
-            <p>Для создания и обновления проекта используется ИИ DEEPSEEK. Все изменения документируются на этой странице.</p>
+            <p><strong>ГЕНЕРАЦИЯ КОДА:</strong></p>
+            <p>Для создания и обновления проекта используется ИИ DEEPSEEK. Все изменения документируются в этом архиве.</p>
         </section>
 
-        <!-- Навигация по якорям -->
-        <nav class="anchor-menu">
-            <h2>НАВИГАЦИЯ ПО ВЕРСИЯМ</h2>
+        <!-- Инструкция для ИИ -->
+        <section class="ai-instruction">
+            <h3>📋 ИНСТРУКЦИЯ ДЛЯ ИИ ЧАТА:</h3>
+            <p><strong>Цель:</strong> Создание страницы архива изменений проекта в стиле "Пентагон"</p>
+            <p><strong>Требования:</strong></p>
             <ul>
-                <li><a href="#project-info">Информация о проекте</a></li>
-                <li><a href="#version-1">Версия 1.0</a></li>
-                <li><a href="#version-1-1">Версия 1.1</a></li>
-                <!-- Добавляйте новые ссылки по мере появления версий -->
+                <li>Темно-серый фон с синим текстом (соотношение 97%)</li>
+                <li>Яркий неоново-желтый для акцентов (3% контента)</li>
+                <li>Якорное меню в виде кнопок вверху страницы</li>
+                <li>Четкое визуальное разделение кликабельных элементов</li>
+                <li>Ссылки на основную страницу проекта и GitHub</li>
+                <li>Последняя версия всегда первая в навигации</li>
             </ul>
+        </section>
+
+        <!-- Навигация по якорям - КНОПКИ -->
+        <nav class="anchor-menu">
+            <h2>🚀 НАВИГАЦИЯ ПО ВЕРСИЯМ ПРОЕКТА</h2>
+            <div class="anchor-buttons">
+                <a href="#version-1-2" class="anchor-btn latest">ВЕРСИЯ 1.2</a>
+                <a href="#version-1-1" class="anchor-btn">ВЕРСИЯ 1.1</a>
+                <a href="#version-1" class="anchor-btn">ВЕРСИЯ 1.0</a>
+                <a href="#project-info" class="anchor-btn">О ПРОЕКТЕ</a>
+            </div>
         </nav>
 
         <!-- Основной контент -->
         <main>
             <!-- Информация о проекте -->
             <section id="project-info" class="section">
-                <h2>ИНФОРМАЦИЯ О ПРОЕКТЕ</h2>
+                <h2>🔍 ИНФОРМАЦИЯ О ПРОЕКТЕ</h2>
                 <p>Проект "ARITDON" - это веб-симулятор типографии в стиле игры "Как достать соседа".</p>
                 <p>Основная цель проекта: создание интерактивного опыта, имитирующего работу типографии с элементами игрового процесса.</p>
                 <div class="important">
-                    Ссылка на проект: <a href="https://sunpole.github.io/ARITDON/" target="_blank">https://sunpole.github.io/ARITDON/</a>
+                    🔗 Ссылка на проект: <a href="https://sunpole.github.io/ARITDON/" target="_blank">https://sunpole.github.io/ARITDON/</a>
                 </div>
             </section>
 
             <!-- Версия 1.0 -->
             <section id="version-1" class="section">
-                <h2>ВЕРСИЯ 1.0 - ОСНОВАНИЕ ПРОЕКТА</h2>
+                <h2>🎯 ВЕРСИЯ 1.0 - ОСНОВАНИЕ ПРОЕКТА</h2>
                 <div class="version">
                     <h3>Исходный запрос к ИИ:</h3>
                     <div class="code-block">
@@ -209,70 +387,120 @@
             </section>
 
             <!-- Версия 1.1 -->
-<section id="version-1-1" class="section">
-    <h2>ВЕРСИЯ 1.1 - СОЗДАНИЕ СТРАНИЦЫ АРХИВА ИЗМЕНЕНИЙ</h2>
-    <div class="version">
-        <h3>Что было добавлено:</h3>
-        <ul>
-            <li>Создан файл changelog.html для ведения истории изменений проекта</li>
-            <li>Реализована структура страницы архива в стиле "Пентагон"</li>
-            <li>Добавлена система навигации по версиям через якорные ссылки</li>
-        </ul>
-
-        <h3>Описание файла changelog.html:</h3>
-        <div class="important">
-            Файл changelog.html служит официальным архивом всех изменений проекта ARITDON
-        </div>
-        
-        <p><strong>Как работать с файлом:</strong></p>
-        <ul>
-            <li>Файл расположен по адресу: <a href="https://github.com/sunpole/ARITDON/edit/main/changelog.html" target="_blank">https://github.com/sunpole/ARITDON/edit/main/changelog.html</a></li>
-            <li>Для добавления новой версии необходимо создать новую секцию с уникальным ID</li>
-            <li>Добавить ссылку на новую версию в навигационное меню</li>
-            <li>Заполнить контент новой версии с описанием изменений</li>
-        </ul>
-
-        <h3>Структура поиска логов версий:</h3>
-        <div class="code-block">
-            <p>1. Откройте файл changelog.html в редакторе кода</p>
-            <p>2. Найдите нужную версию по заголовкам:</p>
-            <p>   - Версия 1.0: &lt;section id="version-1"&gt;</p>
-            <p>   - Версия 1.1: &lt;section id="version-1-1"&gt;</p>
-            <p>3. Используйте навигационное меню вверху страницы для быстрого перехода</p>
-            <p>4. Каждая версия содержит:</p>
-            <p>   - Описание изменений</p>
-            <p>   - Исходные запросы к ИИ (если применимо)</p>
-            <p>   - Ответы ИИ DEEPSEEK</p>
-            <p>   - Краткую информацию о реализации</p>
-        </div>
-
-        <h3>Ключевые особенности changelog.html:</h3>
-        <ul>
-            <li>Единый стиль оформления со всем проектом</li>
-            <li>Автоматическая навигация между версиями</li>
-            <li>Подготовленная структура для будущих обновлений</li>
-            <li>Адаптивный дизайн для всех устройств</li>
-            <li>Четкое разделение информации по версиям</li>
-        </ul>
-    </div>
-</section>
-
-
-                        <!-- Здесь будут добавляться новые версии -->
-            <!--
-            <section id="version-1-2" class="section">
-                <h2>ВЕРСИЯ 1.2 - [НАЗВАНИЕ ВЕРСИИ]</h2>
+            <section id="version-1-1" class="section">
+                <h2>📁 ВЕРСИЯ 1.1 - СОЗДАНИЕ СТРАНИЦЫ АРХИВА ИЗМЕНЕНИЙ</h2>
                 <div class="version">
-                    [ОПИСАНИЕ И ЗАПРОС К ИИ ДЛЯ ЭТОЙ ВЕРСИИ]
+                    <h3>Что было добавлено:</h3>
+                    <ul>
+                        <li>Создан файл changelog.html для ведения истории изменений проекта</li>
+                        <li>Реализована структура страницы архива в стиле "Пентагон"</li>
+                        <li>Добавлена система навигации по версиям через якорные ссылки</li>
+                    </ul>
+            
+                    <h3>Описание файла changelog.html:</h3>
+                    <div class="important">
+                        📊 Файл changelog.html служит официальным архивом всех изменений проекта ARITDON
+                    </div>
+                    
+                    <p><strong>Как работать с файлом:</strong></p>
+                    <ul>
+                        <li>Файл расположен по адресу: <a href="https://github.com/sunpole/ARITDON/edit/main/changelog.html" target="_blank">https://github.com/sunpole/ARITDON/edit/main/changelog.html</a></li>
+                        <li>Для добавления новой версии необходимо создать новую секцию с уникальным ID</li>
+                        <li>Добавить ссылку на новую версию в навигационное меню</li>
+                        <li>Заполнить контент новой версии с описанием изменений</li>
+                    </ul>
+            
+                    <h3>Структура поиска логов версий:</h3>
+                    <div class="code-block">
+                        <p>1. Откройте файл changelog.html в редакторе кода</p>
+                        <p>2. Найдите нужную версию по заголовкам:</p>
+                        <p>   - Версия 1.0: &lt;section id="version-1"&gt;</p>
+                        <p>   - Версия 1.1: &lt;section id="version-1-1"&gt;</p>
+                        <p>3. Используйте навигационное меню вверху страницы для быстрого перехода</p>
+                        <p>4. Каждая версия содержит:</p>
+                        <p>   - Описание изменений</p>
+                        <p>   - Исходные запросы к ИИ (если применимо)</p>
+                        <p>   - Ответы ИИ DEEPSEEK</p>
+                        <p>   - Краткую информацию о реализации</p>
+                    </div>
+            
+                    <h3>Ключевые особенности changelog.html:</h3>
+                    <ul>
+                        <li>Единый стиль оформления со всем проектом</li>
+                        <li>Автоматическая навигация между версиями</li>
+                        <li>Подготовленная структура для будущих обновлений</li>
+                        <li>Адаптивный дизайн для всех устройств</li>
+                        <li>Четкое разделение информации по версиям</li>
+                    </ul>
                 </div>
             </section>
-            -->
+
+            <!-- Версия 1.2 -->
+            <section id="version-1-2" class="section">
+                <h2>⚡ ВЕРСИЯ 1.2 - ОПТИМИЗАЦИЯ СЕТКИ И ИНТЕРФЕЙСА</h2>
+                <div class="version">
+                    <h3>Основные изменения:</h3>
+                    
+                    <div class="important">
+                        🎯 Ключевое улучшение: Оптимизация отображения для мобильных устройств и единообразие на всех платформах
+                    </div>
             
+                    <h3>Детали изменений:</h3>
+                    
+                    <h4>📐 Уменьшение размера сетки:</h4>
+                    <ul>
+                        <li>Изменена сетка с 19×10 на 18×9 для лучшего отображения на мобильных устройствах</li>
+                        <li>Обновлены подписи: теперь 18 букв (A-R) и 9 цифр (1-9)</li>
+                    </ul>
+            
+                    <h4>🎯 Перемещение сетки к низу экрана:</h4>
+                    <ul>
+                        <li>Использован <code>justify-content: flex-end</code> для прижатия сетки к нижней части</li>
+                        <li>Добавлены отступы для заголовка сверху и названия проекта снизу</li>
+                    </ul>
+            
+                    <h4>✏️ Изменение заголовка:</h4>
+                    <ul>
+                        <li>Заменен "Морской бой" на "ARITDON - Симулятор Типографии"</li>
+                        <li>Стилизован в соответствии с тематикой проекта</li>
+                    </ul>
+            
+                    <h4>📱 Оптимизация для мобильных устройств:</h4>
+                    <ul>
+                        <li>Улучшена адаптивность для различных размеров экранов</li>
+                        <li>Обеспечено полное отображение сетки без обрезания</li>
+                        <li>Сохранена квадратная форма ячеек</li>
+                    </ul>
+            
+                    <h4>🏗️ Улучшение структуры:</h4>
+                    <ul>
+                        <li>Использовано абсолютное позиционирование для точного размещения элементов</li>
+                        <li>Оптимизировано использование пространства экрана</li>
+                        <li>Убраны лишние отступы и промежутки</li>
+                    </ul>
+            
+                    <h3>Результат:</h3>
+                    <div class="code-block">
+                        <p>✅ Обеспечено одинаковое отображение игры на всех устройствах</p>
+                        <p>✅ Поддержка старых и новых моделей устройств</p>
+                        <p>✅ Кросс-платформенная совместимость (iOS и Android)</p>
+                        <p>✅ Улучшенный пользовательский опыт на мобильных устройствах</p>
+                    </div>
+            
+                    <h3>Технические детали:</h3>
+                    <ul>
+                        <li>Сетка теперь занимает оптимальное пространство на экране</li>
+                        <li>Улучшено соотношение сторон для различных разрешений</li>
+                        <li>Сохранена читаемость всех элементов интерфейса</li>
+                        <li>Оптимизировано использование touch-интерфейса на мобильных устройствах</li>
+                    </ul>
+                </div>
+            </section>
             
             <!-- Здесь будут добавляться новые версии -->
             <!--
-            <section id="version-2" class="section">
-                <h2>ВЕРСИЯ 2.0 - [НАЗВАНИЕ ВЕРСИИ]</h2>
+            <section id="version-1-3" class="section">
+                <h2>ВЕРСИЯ 1.3 - [НАЗВАНИЕ ВЕРСИИ]</h2>
                 <div class="version">
                     [ОПИСАНИЕ И ЗАПРОС К ИИ ДЛЯ ЭТОЙ ВЕРСИИ]
                 </div>
@@ -281,9 +509,9 @@
         </main>
 
         <!-- Футер -->
-        <footer style="margin-top: 50px; text-align: center; border-top: 1px solid #00aaff; padding-top: 20px;">
-            <p>Проект "ARITDON" | Код генерируется с помощью ИИ DEEPSEEK</p>
-            <p>Страница архива обновляется вручную при каждом значительном изменении проекта</p>
+        <footer>
+            <p>🔒 СЕКРЕТНЫЙ ПРОЕКТ "ARITDON" | Код генерируется с помощью ИИ DEEPSEEK</p>
+            <p>📝 Страница архива обновляется вручную при каждом значительном изменении проекта</p>
         </footer>
     </div>
 </body>
