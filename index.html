@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARITDON</title>
+    <title>ARITDON - Симулятор Типографии</title>
     <style>
         * {
             margin: 0;
@@ -12,11 +12,13 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background: #1a1a2e;
             color: white;
             overflow: hidden;
-            height: 100vh; /* Занимаем всю высоту окна */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         #orientation-message {
@@ -61,55 +63,50 @@
         }
 
         #game-container {
-            /* Контейнер занимает 100% окна */
-            width: 100vw;
-            height: 100vh;
+            flex: 1;
             display: none;
-            /* Используем Grid для общего макета страницы */
-            grid-template-rows: 1fr auto; /* Сетка растягивается, под заголовком - место под ARITDON */
-            padding: 0; /* Убираем внутренние отступы */
-        }
-
-        .header-grid-area {
-            /* Этот контейнер занимает первую строку и содержит основную сетку */
-            display: flex;
             flex-direction: column;
+            width: 100%;
             height: 100%;
+            position: relative;
         }
 
-        .grid-title {
-            /* Стили для заголовка "Морской бой", который находится ВНУТРИ сетки */
+        .game-title {
             text-align: center;
             padding: 8px;
             color: #4cc9f0;
             font-weight: bold;
+            font-size: 1.2em;
             background: #16213e;
-            order: -1; /* Размещаем заголовок ПЕРВЫМ элементом в контейнере (сверху) */
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
         }
 
         .grid-wrapper {
-            /* Обертка для самой игровой сетки и подписей */
-            position: relative;
-            background: #16213e;
-            flex-grow: 1; /* Заставляет обертку занять всё оставшееся место */
+            position: absolute;
+            top: 40px; /* Отступ для заголовка */
+            bottom: 0;
+            left: 0;
+            right: 0;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            flex-direction: column;
+            justify-content: flex-end; /* Прижимаем сетку к низу */
+            background: #16213e;
+            padding: 0 10px 10px 10px;
         }
 
         .battle-grid {
             display: grid;
-            /* 19 колонок, каждая занимает равную долю доступной ширины */
-            grid-template-columns: repeat(19, 1fr);
-            /* 10 строк. Высота каждой равна рассчитанной ширине ячейки */
-            grid-template-rows: repeat(10, var(--cell-size));
+            grid-template-columns: repeat(18, 1fr); /* Уменьшили до 18 столбцов */
+            grid-template-rows: repeat(9, 1fr); /* Уменьшили до 9 строк */
             gap: 1px;
             background: #0f3460;
             border: 2px solid #4cc9f0;
-            /* Сетка растягивается на всю доступную площадь */
             width: 100%;
-            height: 100%;
+            height: calc(100% - 20px); /* Оставляем место для подписей снизу */
             max-width: 100%;
             max-height: 100%;
         }
@@ -128,19 +125,19 @@
         /* Подписи */
         .labels-top, .labels-bottom {
             position: absolute;
-            left: 0;
-            right: 0;
+            left: 10px;
+            right: 10px;
             display: flex;
             justify-content: space-between;
-            pointer-events: none; /* Чтобы подписи не мешали кликать по ячейкам */
+            pointer-events: none;
         }
 
         .labels-top {
-            top: 0;
+            top: 5px;
         }
 
         .labels-bottom {
-            bottom: 0;
+            bottom: 5px;
         }
 
         .labels-left, .labels-right {
@@ -164,18 +161,20 @@
         .label {
             color: #4cc9f0;
             font-weight: bold;
-            font-size: 12px; /* Чуть меньший шрифт для компактности */
+            font-size: 12px;
             padding: 2px;
         }
 
         .project-title {
-            /* Стиль для названия проекта ARITDON */
             text-align: center;
             padding: 8px;
-            color: #666; /* Серый цвет */
+            color: #666;
             font-size: 0.9em;
             background: #16213e;
-            grid-row: 2; /* Размещаем во второй строке общего контейнера */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
         }
 
         .hint-button {
@@ -220,20 +219,18 @@
 
     <!-- Игровой контейнер -->
     <div id="game-container">
-        <div class="header-grid-area">
-            <div class="grid-title">Морской бой</div>
-            <div class="grid-wrapper">
-                <!-- Подписи сверху -->
-                <div class="labels-top" id="labels-top"></div>
-                <!-- Подписи снизу -->
-                <div class="labels-bottom" id="labels-bottom"></div>
-                <!-- Подписи слева -->
-                <div class="labels-left" id="labels-left"></div>
-                <!-- Подписи справа -->
-                <div class="labels-right" id="labels-right"></div>
-                <!-- Игровая сетка -->
-                <div class="battle-grid" id="battle-grid"></div>
-            </div>
+        <div class="game-title">ARITDON - Симулятор Типографии</div>
+        <div class="grid-wrapper">
+            <!-- Подписи сверху -->
+            <div class="labels-top" id="labels-top"></div>
+            <!-- Подписи снизу -->
+            <div class="labels-bottom" id="labels-bottom"></div>
+            <!-- Подписи слева -->
+            <div class="labels-left" id="labels-left"></div>
+            <!-- Подписи справа -->
+            <div class="labels-right" id="labels-right"></div>
+            <!-- Игровая сетка -->
+            <div class="battle-grid" id="battle-grid"></div>
         </div>
         <!-- Название проекта -->
         <div class="project-title">ARITDON</div>
@@ -245,12 +242,11 @@
     </button>
 
     <script>
-        // Функция проверки ориентации и расчета размера ячейки
-        function checkOrientationAndLayout() {
+        // Функция проверки ориентации
+        function checkOrientation() {
             const orientationMessage = document.getElementById('orientation-message');
             const gameContainer = document.getElementById('game-container');
             const hintButton = document.getElementById('hint-button');
-            const battleGrid = document.getElementById('battle-grid');
             
             const isPortrait = window.innerHeight > window.innerWidth;
             
@@ -260,45 +256,28 @@
                 hintButton.style.display = 'flex';
             } else {
                 orientationMessage.style.display = 'none';
-                gameContainer.style.display = 'grid';
+                gameContainer.style.display = 'flex';
                 hintButton.style.display = 'none';
-
-                // РАСЧЕТ РАЗМЕРА КВАДРАТНОЙ ЯЧЕЙКИ
-                // Ширина доступной области для сетки
-                const gridWidth = battleGrid.clientWidth;
-                // Высота доступной области для сетки
-                const gridHeight = battleGrid.clientHeight;
-
-                // Расчет ширины одной ячейки: (общая ширина - 18 промежутков) / 19
-                const cellWidth = (gridWidth - (18 * 1)) / 19; // 1px - это наш gap
-                // Расчет высоты одной ячейки: (общая высота - 9 промежутков) / 10
-                const cellHeight = (gridHeight - (9 * 1)) / 10;
-
-                // Берем МЕНЬШЕЕ значение, чтобы ячейки оставались квадратными и помещались по высоте
-                const cellSize = Math.min(cellWidth, cellHeight);
-
-                // Устанавливаем размер ячейки как CSS переменную
-                battleGrid.style.setProperty('--cell-size', cellSize + 'px');
             }
         }
 
-        // Создание сетки 19x10
+        // Создание сетки 18x9
         function createGrid() {
             const grid = document.getElementById('battle-grid');
             grid.innerHTML = '';
             
-            for (let i = 0; i < 10 * 19; i++) {
+            for (let i = 0; i < 9 * 18; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'grid-cell';
-                cell.dataset.row = Math.floor(i / 19);
-                cell.dataset.col = i % 19;
+                cell.dataset.row = Math.floor(i / 18);
+                cell.dataset.col = i % 18;
                 grid.appendChild(cell);
             }
         }
 
         // Создание подписей
         function createLabels() {
-            const letters = 'ABCDEFGHIJKLMNOPQRS'; // 19 букв
+            const letters = 'ABCDEFGHIJKLMNOPQR'; // 18 букв
             const topLabels = document.getElementById('labels-top');
             const bottomLabels = document.getElementById('labels-bottom');
             const leftLabels = document.getElementById('labels-left');
@@ -307,7 +286,7 @@
             // Подписи сверху и снизу (буквы)
             topLabels.innerHTML = '';
             bottomLabels.innerHTML = '';
-            for (let i = 0; i < 19; i++) {
+            for (let i = 0; i < 18; i++) {
                 const topLabel = document.createElement('div');
                 const bottomLabel = document.createElement('div');
                 topLabel.className = 'label';
@@ -321,7 +300,7 @@
             // Подписи слева и справа (цифры)
             leftLabels.innerHTML = '';
             rightLabels.innerHTML = '';
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= 9; i++) {
                 const leftLabel = document.createElement('div');
                 const rightLabel = document.createElement('div');
                 leftLabel.className = 'label';
@@ -343,13 +322,16 @@
 
         // Инициализация
         function init() {
+            checkOrientation();
             createGrid();
             createLabels();
-            checkOrientationAndLayout();
             
             // Обработчики изменения размера и ориентации
-            window.addEventListener('resize', checkOrientationAndLayout);
-            window.addEventListener('orientationchange', checkOrientationAndLayout);
+            window.addEventListener('resize', checkOrientation);
+            window.addEventListener('orientationchange', checkOrientation);
+            
+            // Обновляем каждую секунду на всякий случай
+            setInterval(checkOrientation, 1000);
         }
 
         // Запуск при загрузке
