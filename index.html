@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Морской бой</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            overflow: hidden;
+        }
+
+        #orientation-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #rotate-animation {
+            width: 100px;
+            height: 100px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .phone {
+            width: 40px;
+            height: 70px;
+            border: 3px solid white;
+            border-radius: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotatePhone 2s infinite;
+        }
+
+        @keyframes rotatePhone {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) rotate(90deg); }
+            100% { transform: translate(-50%, -50%) rotate(90deg); }
+        }
+
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .grid-wrapper {
+            position: relative;
+            background: #16213e;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 255, 0.3);
+        }
+
+        .battle-grid {
+            display: grid;
+            grid-template-columns: repeat(19, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 1px;
+            width: 95vw;
+            max-width: 950px;
+            height: 50vh;
+            max-height: 500px;
+            background: #0f3460;
+            border: 2px solid #4cc9f0;
+        }
+
+        .grid-cell {
+            background: #1a1a2e;
+            border: 1px solid #2d4059;
+            transition: all 0.2s;
+        }
+
+        .grid-cell:hover {
+            background: #2d4059;
+            cursor: pointer;
+        }
+
+        /* Подписи */
+        .labels-top, .labels-bottom {
+            position: absolute;
+            left: 40px;
+            right: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .labels-top {
+            top: 5px;
+        }
+
+        .labels-bottom {
+            bottom: 5px;
+        }
+
+        .labels-left, .labels-right {
+            position: absolute;
+            top: 30px;
+            bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .labels-left {
+            left: 10px;
+        }
+
+        .labels-right {
+            right: 10px;
+        }
+
+        .label {
+            color: #4cc9f0;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .hint-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #4cc9f0;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
+            z-index: 100;
+        }
+
+        .hint-icon {
+            width: 30px;
+            height: 30px;
+            animation: hintPulse 1.5s infinite;
+        }
+
+        @keyframes hintPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Сообщение о необходимости поворота -->
+    <div id="orientation-message">
+        <h2>Пожалуйста, поверните устройство</h2>
+        <p>Игра работает только в альбомной ориентации</p>
+        <div id="rotate-animation">
+            <div class="phone"></div>
+        </div>
+    </div>
+
+    <!-- Игровой контейнер -->
+    <div id="game-container">
+        <h1>Морской бой</h1>
+        <div class="grid-wrapper">
+            <!-- Подписи сверху -->
+            <div class="labels-top" id="labels-top"></div>
+            <!-- Подписи снизу -->
+            <div class="labels-bottom" id="labels-bottom"></div>
+            <!-- Подписи слева -->
+            <div class="labels-left" id="labels-left"></div>
+            <!-- Подписи справа -->
+            <div class="labels-right" id="labels-right"></div>
+            <!-- Игровая сетка -->
+            <div class="battle-grid" id="battle-grid"></div>
+        </div>
+    </div>
+
+    <!-- Кнопка-подсказка -->
+    <button class="hint-button" id="hint-button">
+        <div class="hint-icon">🔄</div>
+    </button>
+
+    <script>
+        // Функция проверки ориентации
+        function checkOrientation() {
+            const orientationMessage = document.getElementById('orientation-message');
+            const gameContainer = document.getElementById('game-container');
+            const hintButton = document.getElementById('hint-button');
+            
+            const isPortrait = window.innerHeight > window.innerWidth;
+            
+            if (isPortrait) {
+                orientationMessage.style.display = 'flex';
+                gameContainer.style.display = 'none';
+                hintButton.style.display = 'flex';
+            } else {
+                orientationMessage.style.display = 'none';
+                gameContainer.style.display = 'flex';
+                hintButton.style.display = 'none';
+            }
+        }
+
+        // Создание сетки 19x10
+        function createGrid() {
+            const grid = document.getElementById('battle-grid');
+            grid.innerHTML = '';
+            
+            for (let i = 0; i < 10 * 19; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                cell.dataset.row = Math.floor(i / 19);
+                cell.dataset.col = i % 19;
+                grid.appendChild(cell);
+            }
+        }
+
+        // Создание подписей
+        function createLabels() {
+            const letters = 'ABCDEFGHIJKLMNOPQRS'; // 19 букв
+            const topLabels = document.getElementById('labels-top');
+            const bottomLabels = document.getElementById('labels-bottom');
+            const leftLabels = document.getElementById('labels-left');
+            const rightLabels = document.getElementById('labels-right');
+            
+            // Подписи сверху и снизу (буквы)
+            topLabels.innerHTML = '';
+            bottomLabels.innerHTML = '';
+            for (let i = 0; i < 19; i++) {
+                const topLabel = document.createElement('div');
+                const bottomLabel = document.createElement('div');
+                topLabel.className = 'label';
+                bottomLabel.className = 'label';
+                topLabel.textContent = letters[i];
+                bottomLabel.textContent = letters[i];
+                topLabels.appendChild(topLabel);
+                bottomLabels.appendChild(bottomLabel);
+            }
+            
+            // Подписи слева и справа (цифры)
+            leftLabels.innerHTML = '';
+            rightLabels.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                const leftLabel = document.createElement('div');
+                const rightLabel = document.createElement('div');
+                leftLabel.className = 'label';
+                rightLabel.className = 'label';
+                leftLabel.textContent = i;
+                rightLabel.textContent = i;
+                leftLabels.appendChild(leftLabel);
+                rightLabels.appendChild(rightLabel);
+            }
+        }
+
+        // Обработчик кнопки-подсказки
+        document.getElementById('hint-button').addEventListener('click', function() {
+            // Можно добавить дополнительную анимацию при клике
+            this.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+
+        // Инициализация
+        function init() {
+            checkOrientation();
+            createGrid();
+            createLabels();
+            
+            // Обработчики изменения размера и ориентации
+            window.addEventListener('resize', checkOrientation);
+            window.addEventListener('orientationchange', checkOrientation);
+            
+            // Обновляем каждую секунду на всякий случай
+            setInterval(checkOrientation, 1000);
+        }
+
+        // Запуск при загрузке
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
