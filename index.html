@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Морской бой</title>
+    <title>ARITDON</title>
     <style>
         * {
             margin: 0;
@@ -16,6 +16,7 @@
             background: #1a1a2e;
             color: white;
             overflow: hidden;
+            height: 100vh; /* Занимаем всю высоту окна */
         }
 
         #orientation-message {
@@ -60,34 +61,57 @@
         }
 
         #game-container {
+            /* Контейнер занимает 100% окна */
             width: 100vw;
             height: 100vh;
             display: none;
+            /* Используем Grid для общего макета страницы */
+            grid-template-rows: 1fr auto; /* Сетка растягивается, под заголовком - место под ARITDON */
+            padding: 0; /* Убираем внутренние отступы */
+        }
+
+        .header-grid-area {
+            /* Этот контейнер занимает первую строку и содержит основную сетку */
+            display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
+            height: 100%;
+        }
+
+        .grid-title {
+            /* Стили для заголовка "Морской бой", который находится ВНУТРИ сетки */
+            text-align: center;
+            padding: 8px;
+            color: #4cc9f0;
+            font-weight: bold;
+            background: #16213e;
+            order: -1; /* Размещаем заголовок ПЕРВЫМ элементом в контейнере (сверху) */
         }
 
         .grid-wrapper {
+            /* Обертка для самой игровой сетки и подписей */
             position: relative;
             background: #16213e;
-            padding: 30px 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 255, 0.3);
+            flex-grow: 1; /* Заставляет обертку занять всё оставшееся место */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
         .battle-grid {
             display: grid;
+            /* 19 колонок, каждая занимает равную долю доступной ширины */
             grid-template-columns: repeat(19, 1fr);
-            grid-template-rows: repeat(10, 1fr);
+            /* 10 строк. Высота каждой равна рассчитанной ширине ячейки */
+            grid-template-rows: repeat(10, var(--cell-size));
             gap: 1px;
-            width: 95vw;
-            max-width: 950px;
-            height: 50vh;
-            max-height: 500px;
             background: #0f3460;
             border: 2px solid #4cc9f0;
+            /* Сетка растягивается на всю доступную площадь */
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
         }
 
         .grid-cell {
@@ -104,41 +128,54 @@
         /* Подписи */
         .labels-top, .labels-bottom {
             position: absolute;
-            left: 40px;
-            right: 40px;
+            left: 0;
+            right: 0;
             display: flex;
             justify-content: space-between;
+            pointer-events: none; /* Чтобы подписи не мешали кликать по ячейкам */
         }
 
         .labels-top {
-            top: 5px;
+            top: 0;
         }
 
         .labels-bottom {
-            bottom: 5px;
+            bottom: 0;
         }
 
         .labels-left, .labels-right {
             position: absolute;
-            top: 30px;
-            bottom: 30px;
+            top: 0;
+            bottom: 0;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            pointer-events: none;
         }
 
         .labels-left {
-            left: 10px;
+            left: 0;
         }
 
         .labels-right {
-            right: 10px;
+            right: 0;
         }
 
         .label {
             color: #4cc9f0;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 12px; /* Чуть меньший шрифт для компактности */
+            padding: 2px;
+        }
+
+        .project-title {
+            /* Стиль для названия проекта ARITDON */
+            text-align: center;
+            padding: 8px;
+            color: #666; /* Серый цвет */
+            font-size: 0.9em;
+            background: #16213e;
+            grid-row: 2; /* Размещаем во второй строке общего контейнера */
         }
 
         .hint-button {
@@ -183,19 +220,23 @@
 
     <!-- Игровой контейнер -->
     <div id="game-container">
-        <h1>Морской бой</h1>
-        <div class="grid-wrapper">
-            <!-- Подписи сверху -->
-            <div class="labels-top" id="labels-top"></div>
-            <!-- Подписи снизу -->
-            <div class="labels-bottom" id="labels-bottom"></div>
-            <!-- Подписи слева -->
-            <div class="labels-left" id="labels-left"></div>
-            <!-- Подписи справа -->
-            <div class="labels-right" id="labels-right"></div>
-            <!-- Игровая сетка -->
-            <div class="battle-grid" id="battle-grid"></div>
+        <div class="header-grid-area">
+            <div class="grid-title">Морской бой</div>
+            <div class="grid-wrapper">
+                <!-- Подписи сверху -->
+                <div class="labels-top" id="labels-top"></div>
+                <!-- Подписи снизу -->
+                <div class="labels-bottom" id="labels-bottom"></div>
+                <!-- Подписи слева -->
+                <div class="labels-left" id="labels-left"></div>
+                <!-- Подписи справа -->
+                <div class="labels-right" id="labels-right"></div>
+                <!-- Игровая сетка -->
+                <div class="battle-grid" id="battle-grid"></div>
+            </div>
         </div>
+        <!-- Название проекта -->
+        <div class="project-title">ARITDON</div>
     </div>
 
     <!-- Кнопка-подсказка -->
@@ -204,11 +245,12 @@
     </button>
 
     <script>
-        // Функция проверки ориентации
-        function checkOrientation() {
+        // Функция проверки ориентации и расчета размера ячейки
+        function checkOrientationAndLayout() {
             const orientationMessage = document.getElementById('orientation-message');
             const gameContainer = document.getElementById('game-container');
             const hintButton = document.getElementById('hint-button');
+            const battleGrid = document.getElementById('battle-grid');
             
             const isPortrait = window.innerHeight > window.innerWidth;
             
@@ -218,8 +260,25 @@
                 hintButton.style.display = 'flex';
             } else {
                 orientationMessage.style.display = 'none';
-                gameContainer.style.display = 'flex';
+                gameContainer.style.display = 'grid';
                 hintButton.style.display = 'none';
+
+                // РАСЧЕТ РАЗМЕРА КВАДРАТНОЙ ЯЧЕЙКИ
+                // Ширина доступной области для сетки
+                const gridWidth = battleGrid.clientWidth;
+                // Высота доступной области для сетки
+                const gridHeight = battleGrid.clientHeight;
+
+                // Расчет ширины одной ячейки: (общая ширина - 18 промежутков) / 19
+                const cellWidth = (gridWidth - (18 * 1)) / 19; // 1px - это наш gap
+                // Расчет высоты одной ячейки: (общая высота - 9 промежутков) / 10
+                const cellHeight = (gridHeight - (9 * 1)) / 10;
+
+                // Берем МЕНЬШЕЕ значение, чтобы ячейки оставались квадратными и помещались по высоте
+                const cellSize = Math.min(cellWidth, cellHeight);
+
+                // Устанавливаем размер ячейки как CSS переменную
+                battleGrid.style.setProperty('--cell-size', cellSize + 'px');
             }
         }
 
@@ -276,7 +335,6 @@
 
         // Обработчик кнопки-подсказки
         document.getElementById('hint-button').addEventListener('click', function() {
-            // Можно добавить дополнительную анимацию при клике
             this.style.transform = 'scale(0.9)';
             setTimeout(() => {
                 this.style.transform = 'scale(1)';
@@ -285,16 +343,13 @@
 
         // Инициализация
         function init() {
-            checkOrientation();
             createGrid();
             createLabels();
+            checkOrientationAndLayout();
             
             // Обработчики изменения размера и ориентации
-            window.addEventListener('resize', checkOrientation);
-            window.addEventListener('orientationchange', checkOrientation);
-            
-            // Обновляем каждую секунду на всякий случай
-            setInterval(checkOrientation, 1000);
+            window.addEventListener('resize', checkOrientationAndLayout);
+            window.addEventListener('orientationchange', checkOrientationAndLayout);
         }
 
         // Запуск при загрузке
